@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aurelia Commission · Live2D Model Art & Rigging</title>
+<meta name="description" content="Live2D commissions: model art, rigging, and full bundles for VTubers and streamers.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* CHANGE COLORS HERE: these 6 values control the whole pink theme */
+:root{
+  --ink:#4A1235;    /* dark berry: text and outlines */
+  --hot:#FF7AAE;    /* main pink: buttons */
+  --rose:#FF9DC3;   /* medium pink */
+  --soft:#FFD1E3;   /* soft pink */
+  --blush:#FFEAF2;  /* very light pink: section backgrounds */
+  --paper:#FFF9FB;  /* page background */
+  --display:"Bricolage Grotesque","Trebuchet MS",sans-serif; --body:"DM Sans",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{font:400 1.05rem/1.65 var(--body);color:var(--ink);background:var(--paper)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+h1,h2,h3{font-family:var(--display);line-height:1.08;letter-spacing:-.02em}
+h2{font-size:clamp(1.8rem,4vw,2.6rem);margin-bottom:12px}
+section{padding:80px 0}
+.lead{max-width:60ch;margin-bottom:36px}
+
+/* Image slot: pink placeholder until your image loads on top */
+.art{position:relative;overflow:hidden;border:2px solid var(--ink);border-radius:16px;background:linear-gradient(135deg,var(--soft),var(--rose));display:grid;place-items:center;text-align:center;padding:12px;font-weight:700}
+.art::after{content:attr(data-label)}
+.art img,.art video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;background:var(--soft)}
+
+header{position:sticky;top:0;z-index:5;background:rgba(255,249,251,.94);backdrop-filter:blur(8px);border-bottom:2px solid var(--ink)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
+.logo{font:800 1.15rem var(--display);text-decoration:none}
+nav{display:flex;gap:6px;flex-wrap:wrap}
+nav a{text-decoration:none;font-weight:500;font-size:.95rem;padding:6px 12px;border-radius:99px}
+nav a:hover{background:var(--soft)}
+
+.btn{display:inline-block;text-decoration:none;font-weight:700;padding:13px 24px;border:2px solid var(--ink);border-radius:12px;background:var(--hot);box-shadow:4px 4px 0 var(--ink);transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink)}
+.btn.alt{background:var(--paper)}
+.actions{display:flex;gap:14px;flex-wrap:wrap}
+
+/* Hero */
+.hero{padding:72px 0 88px}
+.hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+.hero h1{font-size:clamp(2.6rem,6vw,4.6rem);margin-bottom:20px}
+.hero p{max-width:46ch;margin-bottom:28px;font-size:1.1rem}
+.hero .art{aspect-ratio:4/5;box-shadow:8px 8px 0 var(--hot)}
+.status{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:.92rem;background:var(--soft);border:2px solid var(--ink);border-radius:99px;padding:4px 14px;margin-bottom:20px}
+.status i{width:10px;height:10px;border-radius:50%;background:var(--ink)}
+
+/* About */
+.about{background:var(--blush)}
+.about .wrap{display:grid;grid-template-columns:.8fr 1.2fr;gap:48px;align-items:center}
+.about .art{aspect-ratio:1/1}
+.about p+p{margin-top:12px}
+
+/* Portfolio */
+.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.gallery .art{aspect-ratio:16/9;border-radius:14px}
+.note{margin-top:16px;font-size:.92rem;opacity:.75}
+
+/* Services */
+.services{background:var(--blush)}
+.service{display:grid;grid-template-columns:1.25fr .75fr;gap:32px;align-items:start;background:var(--paper);border:2px solid var(--ink);border-radius:16px;padding:20px;margin-bottom:24px}
+.service h3{font-size:1.7rem;margin-bottom:8px}
+.service h4{font:700 1rem var(--body);margin:18px 0 6px}
+.perks,.rows{list-style:none;padding:0;margin:0}
+.perks li{position:relative;padding:2px 0 2px 22px}
+.perks li::before{content:"✦";position:absolute;left:0;color:var(--hot)}
+.rows li{display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-bottom:2px dotted var(--rose)}
+.rows b{font-family:var(--display);white-space:nowrap}
+.price{font:700 1.3rem var(--display)}
+.price small{display:block;font:400 .85rem var(--body);opacity:.7}
+.carousel{position:relative;min-width:0}
+.track{position:relative;display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain}
+.track::-webkit-scrollbar{display:none}
+.track .art{flex:0 0 100%;aspect-ratio:16/9;scroll-snap-align:start;scroll-snap-stop:always;border-radius:12px}
+.nav{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:40px;height:40px;border:2px solid var(--ink);border-radius:50%;background:var(--paper);color:var(--ink);font:700 1.4rem/1 var(--display);cursor:pointer}
+.nav:hover{background:var(--hot)}
+.nav.prev{left:10px}
+.nav.next{right:10px}
+.hint{font-size:.85rem;opacity:.7;margin-top:8px}
+/* Banner images are wide (3:1): show them whole inside the same-size box */
+.service.banner .art img{object-fit:contain}
+
+/* Steps */
+.steps{list-style:none;padding:0;counter-reset:s;display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.steps li{counter-increment:s;border-left:4px solid var(--hot);padding:4px 0 4px 16px}
+.steps li::before{content:counter(s);font:800 1.6rem var(--display);display:block}
+.steps b{display:block}
+
+/* FAQ */
+.faq{max-width:760px}
+details{border:2px solid var(--ink);border-radius:12px;margin-bottom:12px;background:var(--paper)}
+summary{cursor:pointer;font-weight:700;padding:16px 18px;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-size:1.3rem;line-height:1}
+details[open] summary::after{content:"−"}
+details p{padding:0 18px 18px}
+
+/* Contact */
+.contact{background:var(--ink);color:var(--paper)}
+.contact .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+.contact .art{aspect-ratio:4/3;border-color:var(--paper);color:var(--ink)}
+.contact .btn{color:var(--ink)}
+.contact .btn.alt{background:var(--soft)}
+footer{background:var(--ink);color:var(--paper);padding:0 0 32px;font-size:.9rem;opacity:.9}
+
+/* Request form */
+#request{padding-top:0}
+.req{display:grid;grid-template-columns:1.1fr .9fr;gap:32px;align-items:start}
+#req label,#req .lab{display:block;font-weight:700;margin:14px 0 4px}
+#req label.addon{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0;padding:6px 0;border-bottom:2px dotted var(--rose);font-weight:400}
+#req label.check{display:flex;gap:10px;align-items:flex-start;font-weight:400;margin-top:18px}
+#req input:not([type=checkbox]),#req select,#req textarea{width:100%;font:inherit;color:inherit;background:var(--paper);border:2px solid var(--ink);border-radius:10px;padding:10px 12px}
+#req label.addon input[type=number]{width:76px;flex:none}
+#req input[type=checkbox]{width:18px;height:18px;accent-color:var(--hot);flex:none;margin-right:6px}
+.summary{position:sticky;top:84px;background:var(--blush);border:2px solid var(--ink);border-radius:16px;padding:20px}
+.summary h3{margin-bottom:10px}
+.summary pre{font:400 .92rem/1.5 var(--body);white-space:pre-wrap;word-break:break-word;background:var(--paper);border:2px solid var(--ink);border-radius:10px;padding:12px;max-height:300px;overflow:auto}
+.total{margin:14px 0;font-size:1.15rem}
+.err{min-height:1.5em;font-weight:700;margin-top:12px}
+button.btn{font:700 1rem var(--body);color:var(--ink);cursor:pointer}
+
+@media (max-width:820px){
+  .hero .wrap,.about .wrap,.contact .wrap,.service,.steps,.req{grid-template-columns:1fr}
+  .summary{position:static}
+  .gallery{grid-template-columns:1fr}
+  .hero .art{aspect-ratio:1/1}
+  section{padding:56px 0}
+  .hero{padding:56px 0 64px}
+  header .wrap{height:auto;padding:10px 20px;flex-direction:column}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn{transition:none}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="logo" href="#home">Aurelia Commission</a>
+    <nav aria-label="Main menu">
+      <a href="#about">About</a>
+      <a href="#portfolio">Portfolio</a>
+      <a href="#services">Services</a>
+      <a href="#how-to-order">How to order</a>
+      <a href="#request">Request</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<!--
+  IMAGES: each pink box is an image slot. Put your files in a folder called "images"
+  with the exact file names used in the <img src="..."> lines below (or change the names).
+  Until an image exists, the pink box stays as a placeholder.
+-->
+<main>
+<section class="hero" id="home">
+  <div class="wrap">
+    <div>
+      <span class="status"><i></i> Commissions open</span>
+      <h1>Your character, ready to move.</h1>
+      <p>Hi, I’m Aurelia! I draw Live2D model art and build the rigging, for VTubers and streamers who want their character to feel alive.</p>
+      <div class="actions">
+        <a class="btn" href="#request">Request a commission</a>
+        <a class="btn alt" href="#services">View services</a>
+      </div>
+    </div>
+    <div class="art" data-label="Your best artwork here">
+      <img src="images/hero.png" alt="Featured artwork by Aurelia" onerror="this.remove()">
+    </div>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="wrap">
+    <div class="art" data-label="Your avatar or self-portrait">
+      <img src="images/about.png" alt="Aurelia’s avatar" onerror="this.remove()">
+    </div>
+    <div>
+      <h2>About Me ♡</h2>
+      <p>Hello, I’m Aurelia! ♡ I’m a digital artist specializing in VTuber model art &amp; Live2D rigging, bringing your characters to life one model at a time!</p>
+      <p>I also do headshot banner commissions on the side, for that extra glow-up. Let’s make something cute together! (˶ᵔ ᵕ ᵔ˶) ♡</p>
+    </div>
+  </div>
+</section>
+
+<section id="portfolio">
+  <div class="wrap">
+    <h2>Portfolio</h2>
+    <p class="lead">A few finished pieces. Take a closer look at any of them.</p>
+    <div class="gallery">
+      <div class="art" data-label="Artwork 1"><img src="images/work1.png" alt="Artwork 1" onerror="this.remove()"></div>
+      <div class="art" data-label="Artwork 2"><img src="images/work2.png" alt="Artwork 2" onerror="this.remove()"></div>
+      <div class="art" data-label="Artwork 3"><img src="images/work3.png" alt="Artwork 3" onerror="this.remove()"></div>
+      <div class="art" data-label="Artwork 4"><img src="images/work4.png" alt="Artwork 4" onerror="this.remove()"></div>
+      <div class="art" data-label="Artwork 5"><img src="images/work5.png" alt="Artwork 5" onerror="this.remove()"></div>
+      <div class="art" data-label="Artwork 6"><img src="images/work6.png" alt="Artwork 6" onerror="this.remove()"></div>
+    </div>
+  </div>
+</section>
+
+<section class="services" id="services">
+  <div class="wrap">
+    <h2>Services &amp; pricing ♡</h2>
+    <p class="lead">Pick the service that fits your project. Not sure which one you need? Just ask me and I’ll help you decide.</p>
+    <article class="service">
+      <div class="carousel">
+        <div class="track" tabindex="0" role="region" aria-label="Live2D Art &amp; Rigging samples">
+          <div class="art" data-label="Live2D Art &amp; Rigging sample 1"><video controls muted loop playsinline preload="metadata" poster="images/rig1-thumb.png" aria-label="Live2D Art &amp; Rigging sample 1"><source src="images/rig1.mp4#t=0.1" type="video/mp4" onerror="this.parentElement.remove()"></video></div>
+          <div class="art" data-label="Live2D Art &amp; Rigging sample 2"><img src="images/rig2.png" alt="Live2D Art &amp; Rigging sample 2" onerror="this.remove()"></div>
+          <div class="art" data-label="Live2D Art &amp; Rigging sample 3"><img src="images/rig3.png" alt="Live2D Art &amp; Rigging sample 3" onerror="this.remove()"></div>
+          <div class="art" data-label="Live2D Art &amp; Rigging sample 4"><img src="images/rig4.png" alt="Live2D Art &amp; Rigging sample 4" onerror="this.remove()"></div>
+          <div class="art" data-label="Live2D Art &amp; Rigging sample 5"><img src="images/rig5.png" alt="Live2D Art &amp; Rigging sample 5" onerror="this.remove()"></div>
+          <div class="art" data-label="Live2D Art &amp; Rigging sample 6"><img src="images/rig6.png" alt="Live2D Art &amp; Rigging sample 6" onerror="this.remove()"></div>
+        </div>
+        <button class="nav prev" type="button" aria-label="Previous sample">‹</button>
+        <button class="nav next" type="button" aria-label="Next sample">›</button>
+        <p class="hint">Swipe or use the arrows to see more.</p>
+      </div>
+      <div>
+        <h3>Live2D Art &amp; Rigging</h3>
+        <ul class="rows">
+          <li><span>Bust up</span> <b>$300</b></li>
+          <li><span>Half body</span> <b>$400</b></li>
+          <li><span>Full body</span> <b>$500</b></li>
+        </ul>
+        <h4>Included</h4>
+        <ul class="perks">
+          <li>High-resolution artwork: 8,000 × 12,000 px at 350 DPI</li>
+          <li>MOC3 file included with rigging</li>
+          <li>3 custom expressions</li>
+          <li>Unlimited revisions</li>
+        </ul>
+        <h4>Add-ons</h4>
+        <ul class="rows">
+          <li><span>VBridger</span> <b>+$300</b></li>
+          <li><span>Additional expressions</span> <b>+$20 each</b></li>
+          <li><span>Additional outfit</span> <b>+$100</b></li>
+          <li><span>Arm &amp; hand assets</span> <b>+$50</b></li>
+          <li><span>Plushie / mascot</span> <b>+$65</b></li>
+          <li><span>Additional toggles</span> <b>+$30 each</b></li>
+        </ul>
+      </div>
+    </article>
+    <article class="service">
+      <div class="carousel">
+        <div class="track" tabindex="0" role="region" aria-label="VTuber Puppet samples">
+          <div class="art" data-label="VTuber Puppet sample 1"><video controls muted loop playsinline preload="metadata" poster="images/puppet1-thumb.png" aria-label="VTuber Puppet sample 1"><source src="images/puppet1.mp4#t=0.1" type="video/mp4" onerror="this.parentElement.remove()"></video></div>
+          <div class="art" data-label="VTuber Puppet sample 2"><img src="images/puppet2.png" alt="VTuber Puppet sample 2" onerror="this.remove()"></div>
+        </div>
+        <button class="nav prev" type="button" aria-label="Previous sample">‹</button>
+        <button class="nav next" type="button" aria-label="Next sample">›</button>
+        <p class="hint">Swipe or use the arrows to see more.</p>
+      </div>
+      <div>
+        <h3>VTuber Puppet</h3>
+        <ul class="rows">
+          <li><span>Base package</span> <b>$100</b></li>
+        </ul>
+        <h4>Included</h4>
+        <ul class="perks">
+          <li>Custom design based on your OC</li>
+          <li>Advanced Live2D rigging included</li>
+          <li>Ready-to-use VTuber puppet model</li>
+          <li>Unlimited revisions</li>
+        </ul>
+        <h4>Add-ons</h4>
+        <ul class="rows">
+          <li><span>Second outfit</span> <b>+$100</b></li>
+          <li><span>Additional expression</span> <b>+$20 each</b></li>
+          <li><span>Additional toggle</span> <b>+$30 each</b></li>
+        </ul>
+      </div>
+    </article>
+    <article class="service banner">
+      <div class="carousel">
+        <div class="track" tabindex="0" role="region" aria-label="Headshot Banner samples">
+          <div class="art" data-label="Headshot Banner sample 1"><img src="images/banner1.png" alt="Headshot Banner sample 1" onerror="this.remove()"></div>
+          <div class="art" data-label="Headshot Banner sample 2"><img src="images/banner2.png" alt="Headshot Banner sample 2" onerror="this.remove()"></div>
+          <div class="art" data-label="Headshot Banner sample 3"><img src="images/banner3.png" alt="Headshot Banner sample 3" onerror="this.remove()"></div>
+          <div class="art" data-label="Headshot Banner sample 4"><img src="images/banner4.png" alt="Headshot Banner sample 4" onerror="this.remove()"></div>
+          <div class="art" data-label="Headshot Banner sample 5"><img src="images/banner5.png" alt="Headshot Banner sample 5" onerror="this.remove()"></div>
+        </div>
+        <button class="nav prev" type="button" aria-label="Previous sample">‹</button>
+        <button class="nav next" type="button" aria-label="Next sample">›</button>
+        <p class="hint">Swipe or use the arrows to see more.</p>
+      </div>
+      <div>
+        <h3>Headshot Banner</h3>
+        <ul class="rows">
+          <li><span>Base</span> <b>$70</b></li>
+        </ul>
+        <h4>Included</h4>
+        <ul class="perks">
+          <li>High-resolution artwork: 3,000 × 1,000 px</li>
+          <li>Unlimited revisions</li>
+        </ul>
+        <h4>Add-ons</h4>
+        <ul class="rows">
+          <li><span>Detailed background</span> <b>+$70</b></li>
+          <li><span>Extra accessories</span> <b>+$20</b></li>
+        </ul>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section id="how-to-order">
+  <div class="wrap">
+    <h2>How to order</h2>
+    <p class="lead">Sending a request never locks you in. Work only starts once we’ve both agreed.</p>
+    <ol class="steps">
+      <li><b>Look around</b>Pick the service that fits your project.</li>
+      <li><b>Send a request</b>Tell me your idea, character references, and budget.</li>
+      <li><b>I review it</b>I check the scope of the project and my schedule.</li>
+      <li><b>We confirm</b>Price, scope, and payment are agreed before any work begins.</li>
+      <li><b>I create</b>You get progress updates on X at each stage, like sketch, base, rendering, and rigging.</li>
+      <li><b>Delivery</b>Final files are sent through a download link.</li>
+    </ol>
+  </div>
+</section>
+
+<section id="request">
+  <div class="wrap">
+    <h2>Request a commission ♡</h2>
+    <p class="lead">Pick what you’d like and you’ll get a ready-made message to send me on X. A request never locks you in: I review every one before any work begins.</p>
+    <div class="req">
+      <form id="req" onsubmit="return false">
+        <label for="svc">Service</label><select id="svc"></select>
+        <label for="pkg">Package</label><select id="pkg"></select>
+        <p class="lab">Add-ons</p><div id="addons"></div>
+        <label for="nm">Name or username *</label><input id="nm" autocomplete="name">
+        <label for="ct">Contact (X @username or email) *</label><input id="ct">
+        <label for="rf">Reference links (optional)</label><input id="rf" placeholder="Google Drive, Pinterest, character sheet">
+        <label for="dl">Preferred deadline (optional)</label><input id="dl" placeholder="For example: debut on Dec 20">
+        <label for="nt">Notes (optional)</label><textarea id="nt" rows="3"></textarea>
+        <label class="check"><input type="checkbox" id="tm"><span>I’ve read the terms and understand that a request is reviewed personally, so it’s not an automatic booking. *</span></label>
+      </form>
+      <aside class="summary" aria-live="polite">
+        <h3>Your request</h3>
+        <pre id="msg"></pre>
+        <p class="total">Estimated total: <b id="tot">$0</b></p>
+        <div class="actions"><button type="button" class="btn" id="dm">Send on X</button><button type="button" class="btn alt" id="cp">Copy request summary</button></div>
+        <p id="err" class="err" role="status"></p>
+        <p class="note">You’ll need to be logged in to X. The total is an estimate, and I confirm the final price with you before any work starts.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section class="services" id="faq">
+  <div class="wrap faq">
+    <h2>Frequently asked questions</h2>
+    <p class="lead">First time commissioning? No worries, there are no silly questions.</p>
+    <details><summary>What is Live2D?</summary><p>Live2D makes a 2D character move: blinking, talking, and turning its head, usually with a face-tracking camera while streaming. It comes in two parts: the model art (the layered drawing) and the rigging (what makes it move).</p></details>
+    <details><summary>Do I need a finished character design?</summary><p>It helps, but it’s not required. Reference images, a written description, or a moodboard are all good starting points.</p></details>
+    <details><summary>How does ordering and payment work?</summary><p>Choose the service you’d like, then send me a DM on X. We’ll talk through the details and confirm the cost again before anything starts. Once we’ve agreed, I’ll begin working, and I’ll share progress updates on X at each stage, such as sketch, base, rendering, and rigging. Prefer Discord? Just let me know on X.</p></details>
+    <details><summary>Can I use the artwork commercially?</summary><p>CHANGE: write your license rules here, for example whether streaming and content are allowed and whether merchandise needs a separate agreement.</p></details>
+    <details><summary>How long will it take?</summary><p>It depends on the service and how complex the project is. You’ll get a time estimate with your quote before you pay.</p></details>
+    <details><summary>What don’t you accept?</summary><p>CHANGE: list the content or requests you don’t take on.</p></details>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div>
+      <h2>Ready to start?</h2>
+      <p class="lead">Send me a message with your idea, references, and the date you have in mind. A rough idea is fine.</p>
+      <div class="actions">
+        <a class="btn" href="https://x.com/AureliaArt_" target="_blank" rel="noopener">DM me on X</a>
+        <a class="btn alt" href="https://ko-fi.com/aureliaart_" target="_blank" rel="noopener">My Ko-fi</a>
+      </div>
+    </div>
+    <div class="art" data-label="A cute illustration here">
+      <img src="images/contact.png" alt="Illustration by Aurelia" onerror="this.remove()">
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap" style="padding-top:24px">
+    <p>© Aurelia. All artwork belongs to its creator. The accounts above are my only official ones, so please watch out for impersonators.</p>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll(".carousel").forEach(function(c){
+  var t=c.querySelector(".track"), hint=c.querySelector(".hint");
+  function cur(){
+    var best=0, d=1e9, k=t.children;
+    for(var i=0;i<k.length;i++){var x=Math.abs(k[i].offsetLeft-t.scrollLeft); if(x<d){d=x;best=i}}
+    return best;
+  }
+  function show(){hint.textContent=(cur()+1)+" / "+t.children.length+" · Swipe or use the arrows to see more."}
+  function go(dir){
+    var i=Math.max(0,Math.min(t.children.length-1,cur()+dir));
+    t.scrollTo({left:t.children[i].offsetLeft,behavior:"smooth"});
+  }
+  c.querySelector(".prev").addEventListener("click",function(){go(-1)});
+  c.querySelector(".next").addEventListener("click",function(){go(1)});
+  t.addEventListener("scroll",show,{passive:true});
+  show();
+});
+</script>
+<script>
+(function(){
+  // Your X numeric user ID and username (without @), used for the DM button
+  var X_ID="2000968580545044488", X_USER="AureliaArt_";
+  // Each add-on: [name, price, perItem]. perItem=1 means the client can pick a quantity.
+  var S={
+    art:{name:"Live2D Art & Rigging",pk:[["Bust up",300],["Half body",400],["Full body",500]],
+      ad:[["VBridger",300,0],["Additional expressions",20,1],["Additional outfit",100,0],["Arm & hand assets",50,0],["Plushie / mascot",65,0],["Additional toggles",30,1]]},
+    puppet:{name:"VTuber Puppet",pk:[["Base package",100]],
+      ad:[["Second outfit",100,0],["Additional expression",20,1],["Additional toggle",30,1]]},
+    banner:{name:"Headshot Banner",pk:[["Base",70]],
+      ad:[["Detailed background",70,0],["Extra accessories",20,0]]}
+  };
+  var $=function(i){return document.getElementById(i)};
+  var svc=$("svc"),pkg=$("pkg"),ads=$("addons");
+  for(var k in S){svc.add(new Option(S[k].name,k))}
+
+  function build(){
+    var s=S[svc.value]; pkg.innerHTML=""; ads.innerHTML="";
+    s.pk.forEach(function(p,i){pkg.add(new Option(p[0]+" ($"+p[1]+")",i))});
+    s.ad.forEach(function(a,i){
+      var l=document.createElement("label"); l.className="addon";
+      l.innerHTML=a[2]
+        ? "<span>"+a[0]+" <small>(+$"+a[1]+" each)</small></span><input type=\"number\" min=\"0\" max=\"20\" value=\"0\" data-i=\""+i+"\" aria-label=\""+a[0]+" quantity\">"
+        : "<span><input type=\"checkbox\" data-i=\""+i+"\">"+a[0]+"</span><b>+$"+a[1]+"</b>";
+      ads.appendChild(l);
+    });
+    update();
+  }
+  function state(){
+    var s=S[svc.value], p=s.pk[pkg.value||0], total=p[1], list=[];
+    ads.querySelectorAll("input").forEach(function(el){
+      var a=s.ad[el.dataset.i];
+      var q=el.type==="checkbox" ? (el.checked?1:0) : Math.max(0,Math.min(20,parseInt(el.value,10)||0));
+      if(q){ total+=a[1]*q; list.push(a[2] ? a[0]+" x"+q+" (+$"+(a[1]*q)+")" : a[0]+" (+$"+a[1]+")"); }
+    });
+    return {s:s,p:p,total:total,list:list};
+  }
+  function msg(){
+    var t=state(), v=function(i){return $(i).value.trim()};
+    var m=["Hi Aurelia! I’d like to request a commission ♡",
+      "Service: "+t.s.name+", "+t.p[0]+" ($"+t.p[1]+")",
+      "Add-ons: "+(t.list.join(", ")||"None"),
+      "Estimated total: $"+t.total,
+      "Name: "+v("nm"),
+      "Contact: "+v("ct")];
+    if(v("rf")) m.push("References: "+v("rf"));
+    if(v("dl")) m.push("Deadline: "+v("dl"));
+    if(v("nt")) m.push("Notes: "+v("nt"));
+    return m.join("\n");
+  }
+  function update(){ $("tot").textContent="$"+state().total; $("msg").textContent=msg(); }
+  function ok(){
+    var e=$("err");
+    if(!$("nm").value.trim()||!$("ct").value.trim()){ e.textContent="Please add your name and a way to contact you."; return false; }
+    if(!$("tm").checked){ e.textContent="Please confirm you’ve read the terms."; return false; }
+    e.textContent=""; return true;
+  }
+  function copy(t){ return navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject(); }
+
+  svc.addEventListener("change",build);
+  $("req").addEventListener("input",update);
+  $("req").addEventListener("change",update);
+  $("cp").onclick=function(){
+    if(!ok()) return;
+    copy(msg()).then(function(){ $("err").textContent="Copied! Paste it into a message to me."; },
+                     function(){ $("err").textContent="Couldn’t copy automatically. Please select the text above and copy it."; });
+  };
+  $("dm").onclick=function(){
+    if(!ok()) return;
+    var m=msg();
+    if(X_ID.indexOf("REPLACE")<0){
+      window.open("https://x.com/messages/compose?recipient_id="+X_ID+"&text="+encodeURIComponent(m),"_blank","noopener");
+    } else {
+      copy(m).catch(function(){});
+      window.open("https://x.com/"+X_USER,"_blank","noopener");
+      $("err").textContent="Message copied. Paste it into your DM to me.";
+    }
+  };
+  build();
+})();
+</script>
+</body>
+</html>
